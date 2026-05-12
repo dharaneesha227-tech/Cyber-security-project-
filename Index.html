@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Email Detection</title>
+</head>
+<body>
+
+<h2>Email Detection Project</h2>
+
+<input type="text" id="email" placeholder="Enter Email">
+<button onclick="checkEmail()">Check</button>
+
+<p id="result"></p>
+
+<script>
+function checkEmail() {
+
+    let email = document.getElementById("email").value;
+
+    if(email.includes("@") && email.includes(".com")) {
+        document.getElementById("result").innerHTML = "Valid Email";
+    }
+    else {
+        document.getElementById("result").innerHTML = "Invalid Email";
+    }
+}
+</script>
+
+</body>
+</html>
