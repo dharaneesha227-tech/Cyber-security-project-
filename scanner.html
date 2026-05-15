@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cyber Port Scanner</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:0;
+    font-family:Arial;
+    background:black;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    overflow:hidden;
+}
+
+.container{
+    width:420px;
+    padding:30px;
+    border-radius:20px;
+    background:rgba(0,0,0,0.8);
+    border:2px solid cyan;
+    box-shadow:0 0 25px cyan;
+    text-align:center;
+}
+
+h1{
+    color:cyan;
+    margin-bottom:20px;
+    text-shadow:0 0 10px cyan;
+}
+
+input{
+    width:90%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    outline:none;
+    font-size:16px;
+    margin-top:10px;
+}
+
+button{
+    width:95%;
+    padding:12px;
+    margin-top:20px;
+    border:none;
+    border-radius:10px;
+    background:cyan;
+    color:black;
+    font-size:18px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+button:hover{
+    background:lime;
+    transform:scale(1.05);
+}
+
+#output{
+    margin-top:20px;
+    text-align:left;
+    max-height:250px;
+    overflow:auto;
+    background:#111;
+    padding:15px;
+    border-radius:10px;
+    border:1px solid cyan;
+}
+
+.open{
+    color:lime;
+}
+
+.closed{
+    color:red;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>CYBER PORT SCANNER</h1>
+
+<input type="text" id="target" placeholder="Enter Website or IP">
+
+<button onclick="scanPorts()">Start Scan</button>
+
+<div id="output"></div>
+
+</div>
+
+<script>
+
+function scanPorts(){
+
+    let target=document.getElementById("target").value;
+
+    let output=document.getElementById("output");
+
+    output.innerHTML="";
+
+    let commonPorts=[
+        {port:21,service:"FTP"},
+        {port:22,service:"SSH"},
+        {port:23,service:"Telnet"},
+        {port:25,service:"SMTP"},
+        {port:53,service:"DNS"},
+        {port:80,service:"HTTP"},
+        {port:110,service:"POP3"},
+        {port:143,service:"IMAP"},
+        {port:443,service:"HTTPS"},
+        {port:3306,service:"MySQL"},
+        {port:8080,service:"Proxy"}
+    ];
+
+    output.innerHTML += "<p>Scanning Target : "+target+"</p><hr>";
+
+    commonPorts.forEach(function(item){
+
+        let random=Math.random();
+
+        if(random>0.5){
+
+            output.innerHTML +=
+            "<p class='open'>[OPEN] Port "
+            +item.port+
+            " → "+item.service+
+            "</p>";
+
+        }
+
+        else{
+
+            output.innerHTML +=
+            "<p class='closed'>[CLOSED] Port "
+            +item.port+
+            "</p>";
+
+        }
+
+    });
+
+    output.innerHTML += "<hr><p>Scan Completed Successfully</p>";
+
+}
+
+</script>
+
+</body>
+</html>
