@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Password Strength Checker</title>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:linear-gradient(135deg,#6a11cb,#2575fc,#ff6ec4);
+    }
+
+    .container{
+      width:350px;
+      background:white;
+      padding:30px;
+      border-radius:20px;
+      text-align:center;
+      box-shadow:0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    h1{
+      margin-bottom:20px;
+      color:#333;
+    }
+
+    input{
+      width:100%;
+      padding:12px;
+      margin-top:15px;
+      border:2px solid #ddd;
+      border-radius:10px;
+      font-size:16px;
+      outline:none;
+    }
+
+    input:focus{
+      border-color:#2575fc;
+    }
+
+    button{
+      width:100%;
+      padding:12px;
+      margin-top:20px;
+      border:none;
+      border-radius:10px;
+      background:linear-gradient(90deg,#ff6ec4,#7873f5);
+      color:white;
+      font-size:18px;
+      cursor:pointer;
+    }
+
+    button:hover{
+      transform:scale(1.05);
+      transition:0.3s;
+    }
+
+    #result{
+      margin-top:20px;
+      font-size:22px;
+      font-weight:bold;
+    }
+
+    .weak{
+      color:red;
+    }
+
+    .medium{
+      color:orange;
+    }
+
+    .strong{
+      color:green;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>Password Strength Checker</h1>
+
+    <input type="password" id="password" placeholder="Enter Password">
+
+    <button onclick="checkPassword()">Check Strength</button>
+
+    <div id="result"></div>
+
+  </div>
+
+  <script>
+
+    function checkPassword(){
+
+      let password=document.getElementById("password").value;
+
+      let strength=0;
+
+      if(password.length>=8){
+        strength++;
+      }
+
+      if(/[A-Z]/.test(password)){
+        strength++;
+      }
+
+      if(/[a-z]/.test(password)){
+        strength++;
+      }
+
+      if(/[0-9]/.test(password)){
+        strength++;
+      }
+
+      if(/[@#$%^&*!]/.test(password)){
+        strength++;
+      }
+
+      let result=document.getElementById("result");
+
+      if(strength==5){
+        result.innerHTML="Strong Password";
+        result.className="strong";
+      }
+
+      else if(strength>=3){
+        result.innerHTML="Medium Password";
+        result.className="medium";
+      }
+
+      else{
+        result.innerHTML="Weak Password";
+        result.className="weak";
+      }
+
+    }
+
+  </script>
+
+</body>
+</html>
