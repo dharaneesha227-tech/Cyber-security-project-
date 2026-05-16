@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Advanced Cyber Security Login System</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
+
+body{
+    background:linear-gradient(135deg,#0f172a,#1e3a8a,#9333ea);
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+/* Glow Effects */
+
+body::before{
+    content:"";
+    position:fixed;
+    width:400px;
+    height:400px;
+    background:cyan;
+    border-radius:50%;
+    filter:blur(120px);
+    opacity:0.2;
+    top:-100px;
+    left:-100px;
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    width:400px;
+    height:400px;
+    background:magenta;
+    border-radius:50%;
+    filter:blur(120px);
+    opacity:0.2;
+    bottom:-100px;
+    right:-100px;
+}
+
+/* Form */
+
+.container{
+
+    width:380px;
+
+    background:rgba(255,255,255,0.1);
+
+    backdrop-filter:blur(10px);
+
+    padding:30px;
+
+    border-radius:20px;
+
+    box-shadow:0 0 20px cyan;
+
+    position:absolute;
+
+    top:50%;
+
+    left:50%;
+
+    transform:translate(-50%,-50%);
+}
+
+h2{
+    text-align:center;
+    color:white;
+    margin-bottom:20px;
+}
+
+.input-box{
+    margin-bottom:15px;
+}
+
+.input-box input{
+
+    width:100%;
+
+    padding:13px;
+
+    border:none;
+
+    border-radius:10px;
+
+    outline:none;
+
+    font-size:16px;
+}
+
+.password-box{
+    position:relative;
+}
+
+.eye{
+    position:absolute;
+    right:10px;
+    top:12px;
+    cursor:pointer;
+}
+
+button{
+
+    width:100%;
+
+    padding:13px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:linear-gradient(to right,cyan,purple);
+
+    color:white;
+
+    font-size:17px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    margin-top:10px;
+
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.03);
+}
+
+.link{
+    text-align:center;
+    margin-top:15px;
+    color:cyan;
+    cursor:pointer;
+}
+
+.message{
+    color:white;
+    text-align:center;
+    margin-top:15px;
+    font-weight:bold;
+}
+
+.strength{
+    margin-top:5px;
+    font-weight:bold;
+}
+
+/* Dashboard */
+
+.dashboard{
+    display:none;
+}
+
+.sidebar{
+
+    width:240px;
+
+    height:100vh;
+
+    background:rgba(0,0,0,0.5);
+
+    backdrop-filter:blur(10px);
+
+    position:fixed;
+
+    left:0;
+
+    top:0;
+
+    padding-top:20px;
+}
+
+.sidebar h2{
+    color:cyan;
+}
+
+.sidebar ul{
+    list-style:none;
+}
+
+.sidebar ul li{
+
+    padding:15px;
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:0.3s;
+}
+
+.sidebar ul li:hover{
+
+    background:rgba(255,255,255,0.1);
+
+    padding-left:25px;
+}
+
+.main{
+
+    margin-left:250px;
+
+    padding:30px;
+
+    color:white;
+}
+
+.card-container{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:20px;
+}
+
+.card{
+
+    width:280px;
+
+    background:rgba(255,255,255,0.1);
+
+    backdrop-filter:blur(10px);
+
+    padding:25px;
+
+    border-radius:20px;
+
+    box-shadow:0 0 15px cyan;
+}
+
+.clock{
+
+    font-size:25px;
+
+    color:cyan;
+
+    margin-bottom:20px;
+}
+
+.logout{
+    width:180px;
+    margin-top:25px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+table th,
+table td{
+
+    border:1px solid white;
+
+    padding:10px;
+
+    text-align:center;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- REGISTER -->
+
+<div class="container" id="registerPage">
+
+<h2>Create Account</h2>
+
+<div class="input-box">
+<input type="text"
+id="regUser"
+placeholder="Create Username">
+</div>
+
+<div class="input-box">
+<input type="email"
+id="regEmail"
+placeholder="Enter Email">
+</div>
+
+<div class="input-box password-box">
+
+<input type="password"
+id="regPass"
+placeholder="Create Password"
+onkeyup="checkStrength()">
+
+<span class="eye"
+onclick="toggleReg()">👁</span>
+
+<div class="strength"
+id="strength"></div>
+
+</div>
+
+<div class="input-box">
+<input type="text"
+id="captchaInput"
+placeholder="Enter CAPTCHA">
+</div>
+
+<h3 id="captchaText"
+style="color:cyan;
+text-align:center;
+margin-bottom:15px;">
+</h3>
+
+<button onclick="register()">
+Register
+</button>
+
+<button onclick="forgotPassword()">
+Forgot Password
+</button>
+
+<div class="link"
+onclick="showLogin()">
+
+Already have account? Login
+
+</div>
+
+<div class="message"
+id="regMsg"></div>
+
+</div>
+
+<!-- LOGIN -->
+
+<div class="container"
+id="loginPage"
+style="display:none;">
+
+<h2>User Login</h2>
+
+<div class="input-box">
+
+<input type="text"
+id="loginUser"
+placeholder="Username or Email">
+
+</div>
+
+<div class="input-box password-box">
+
+<input type="password"
+id="loginPass"
+placeholder="Enter Password">
+
+<span class="eye"
+onclick="toggleLogin()">👁</span>
+
+</div>
+
+<button onclick="login()">
+Login
+</button>
+
+<div class="link"
+onclick="showRegister()">
+
+New User? Register
+
+</div>
+
+<div class="message"
+id="loginMsg"></div>
+
+</div>
+
+<!-- DASHBOARD -->
+
+<div class="dashboard"
+id="dashboard">
+
+<div class="sidebar">
+
+<h2>Dashboard</h2>
+
+<ul>
+
+<li>🏠 Home</li>
+<li>👤 Profile</li>
+<li>🔒 Security</li>
+<li>📊 Analytics</li>
+<li>⚙ Settings</li>
+
+</ul>
+
+</div>
+
+<div class="main">
+
+<h1 id="welcomeText"></h1>
+
+<div class="clock"
+id="clock"></div>
+
+<div class="card-container">
+
+<div class="card">
+
+<h3>Total Logins</h3>
+
+<p id="totalLogins">0</p>
+
+</div>
+
+<div class="card">
+
+<h3>Failed Attempts</h3>
+
+<p id="failedAttempts">0</p>
+
+</div>
+
+<div class="card">
+
+<h3>System Status</h3>
+
+<p>Secure</p>
+
+</div>
+
+<div class="card">
+
+<h3>Security Level</h3>
+
+<progress value="90"
+max="100"
+style="width:100%;">
+</progress>
+
+<br><br>
+
+<p>HIGH SECURITY</p>
+
+</div>
+
+<div class="card">
+
+<h3>System Scan</h3>
+
+<progress value="75"
+max="100"
+style="width:100%;">
+</progress>
+
+<br><br>
+
+<p>Scanning in Progress...</p>
+
+</div>
+
+</div>
+
+<br>
+
+<div class="card"
+style="width:100%;">
+
+<h2>Login History</h2>
+
+<br>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Username</th>
+<th>Status</th>
+<th>Time</th>
+
+</tr>
+
+</thead>
+
+<tbody id="historyTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+<br>
+
+<div class="card"
+style="width:100%;">
+
+<h2>Fingerprint Authentication</h2>
+
+<br>
+
+<center>
+
+<img src=
+"https://cdn-icons-png.flaticon.com/512/2913/2913133.png"
+width="120">
+
+<br><br>
+
+<p>Biometric Access Enabled</p>
+
+</center>
+
+</div>
+
+<br>
+
+<div class="card"
+style="width:100%;">
+
+<h2>Login Analytics Chart</h2>
+
+<br>
+
+<canvas id="loginChart"></canvas>
+
+</div>
+
+<br>
+
+<div class="card"
+style="width:100%;">
+
+<h2>Security Activity Graph</h2>
+
+<br>
+
+<canvas id="securityChart"></canvas>
+
+</div>
+
+<button class="logout"
+onclick="logout()">
+
+Logout
+
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+let attempts = 0;
+let failed = 0;
+let total = 0;
+let locked = false;
+let captcha = "";
+
+generateCaptcha();
+
+/* CAPTCHA */
+
+function generateCaptcha(){
+
+captcha =
+Math.random()
+.toString(36)
+.substring(2,8);
+
+document.getElementById(
+"captchaText")
+.innerHTML = captcha;
+}
+
+/* Password Toggle */
+
+function toggleReg(){
+
+let x =
+document.getElementById(
+"regPass");
+
+x.type =
+x.type === "password"
+? "text"
+: "password";
+}
+
+function toggleLogin(){
+
+let x =
+document.getElementById(
+"loginPass");
+
+x.type =
+x.type === "password"
+? "text"
+: "password";
+}
+
+/* Password Strength */
+
+function checkStrength(){
+
+let pass =
+document.getElementById(
+"regPass").value;
+
+let strength =
+document.getElementById(
+"strength");
+
+if(pass.length < 4){
+
+strength.innerHTML =
+"Weak Password";
+
+strength.style.color =
+"red";
+}
+else if(pass.length < 8){
+
+strength.innerHTML =
+"Medium Password";
+
+strength.style.color =
+"orange";
+}
+else{
+
+strength.innerHTML =
+"Strong Password";
+
+strength.style.color =
+"lime";
+}
+}
+
+/* Page Switch */
+
+function showLogin(){
+
+document.getElementById(
+"registerPage")
+.style.display = "none";
+
+document.getElementById(
+"loginPage")
+.style.display = "block";
+}
+
+function showRegister(){
+
+document.getElementById(
+"loginPage")
+.style.display = "none";
+
+document.getElementById(
+"registerPage")
+.style.display = "block";
+}
+
+/* Register */
+
+function register(){
+
+let user =
+document.getElementById(
+"regUser").value;
+
+let email =
+document.getElementById(
+"regEmail").value;
+
+let pass =
+document.getElementById(
+"regPass").value;
+
+let enteredCaptcha =
+document.getElementById(
+"captchaInput").value;
+
+let msg =
+document.getElementById(
+"regMsg");
+
+if(user === "" ||
+email === "" ||
+pass === ""){
+
+msg.innerHTML =
+"Fill all fields";
+
+return;
+}
+
+if(enteredCaptcha !== captcha){
+
+msg.innerHTML =
+"Invalid CAPTCHA";
+
+generateCaptcha();
+
+return;
+}
+
+/* Save Data */
+
+localStorage.setItem(
+"username",
+user);
+
+localStorage.setItem(
+"email",
+email);
+
+localStorage.setItem(
+"password",
+pass);
+
+msg.innerHTML =
+"Registration Successful";
+
+setTimeout(()=>{
+
+showLogin();
+
+},1000);
+}
+
+/* Login */
+
+function login(){
+
+if(locked){
+return;
+}
+
+let storedUsername =
+localStorage.getItem(
+"username");
+
+let storedEmail =
+localStorage.getItem(
+"email");
+
+let storedPassword =
+localStorage.getItem(
+"password");
+
+let user =
+document.getElementById(
+"loginUser").value;
+
+let pass =
+document.getElementById(
+"loginPass").value;
+
+let msg =
+document.getElementById(
+"loginMsg");
+
+let currentTime =
+new Date()
+.toLocaleString();
+
+if(
+
+(user === storedUsername ||
+ user === storedEmail)
+
+&&
+
+pass === storedPassword
+
+){
+
+document.getElementById(
+"loginPage")
+.style.display = "none";
+
+document.getElementById(
+"dashboard")
+.style.display = "block";
+
+document.getElementById(
+"welcomeText")
+.innerHTML =
+"Welcome " + storedUsername;
+
+total++;
+
+document.getElementById(
+"totalLogins")
+.innerHTML = total;
+
+document.getElementById(
+"historyTable")
+.innerHTML +=
+
+"<tr>" +
+
+"<td>" +
+user +
+"</td>" +
+
+"<td>Success</td>" +
+
+"<td>" +
+currentTime +
+"</td>" +
+
+"</tr>";
+
+attempts = 0;
+}
+else{
+
+attempts++;
+failed++;
+
+document.getElementById(
+"failedAttempts")
+.innerHTML = failed;
+
+document.getElementById(
+"historyTable")
+.innerHTML +=
+
+"<tr>" +
+
+"<td>" +
+user +
+"</td>" +
+
+"<td>Failed</td>" +
+
+"<td>" +
+currentTime +
+"</td>" +
+
+"</tr>";
+
+if(attempts >= 3){
+
+locked = true;
+
+let seconds = 30;
+
+let timer =
+setInterval(()=>{
+
+msg.innerHTML =
+
+"Account Locked<br>" +
+
+"Try again in " +
+
+seconds +
+
+" sec";
+
+seconds--;
+
+if(seconds < 0){
+
+clearInterval(timer);
+
+locked = false;
+
+attempts = 0;
+
+msg.innerHTML =
+"Try Again";
+}
+
+},1000);
+
+}
+else{
+
+msg.innerHTML =
+
+"Invalid Login<br>" +
+
+"Remaining Attempts : " +
+
+(3 - attempts);
+}
+}
+}
+
+/* Forgot Password */
+
+function forgotPassword(){
+
+let user =
+prompt(
+"Enter Username");
+
+let storedUsername =
+localStorage.getItem(
+"username");
+
+let storedPassword =
+localStorage.getItem(
+"password");
+
+if(user === storedUsername){
+
+alert(
+
+"Your Password is : " +
+
+storedPassword);
+}
+else{
+
+alert(
+"User Not Found");
+}
+}
+
+/* Logout */
+
+function logout(){
+
+let confirmLogout =
+confirm(
+"Are you sure to logout?");
+
+if(confirmLogout){
+
+document.getElementById(
+"dashboard")
+.style.display = "none";
+
+document.getElementById(
+"loginPage")
+.style.display = "block";
+}
+}
+
+/* Clock */
+
+function updateClock(){
+
+let now =
+new Date();
+
+let time =
+now.toLocaleTimeString();
+
+document.getElementById(
+"clock")
+.innerHTML = time;
+}
+
+setInterval(
+updateClock,
+1000);
+
+/* Charts */
+
+const ctx1 =
+document.getElementById(
+"loginChart");
+
+new Chart(ctx1,{
+
+type:"bar",
+
+data:{
+
+labels:[
+"Successful",
+"Failed"
+],
+
+datasets:[{
+
+label:"Login Activity",
+
+data:[5,2],
+
+backgroundColor:[
+"cyan",
+"red"
+],
+
+borderRadius:10
+}]
+}
+});
+
+const ctx2 =
+document.getElementById(
+"securityChart");
+
+new Chart(ctx2,{
+
+type:"line",
+
+data:{
+
+labels:[
+"Mon",
+"Tue",
+"Wed",
+"Thu",
+"Fri",
+"Sat",
+"Sun"
+],
+
+datasets:[{
+
+label:"Security Score",
+
+data:[
+60,
+70,
+80,
+75,
+90,
+95,
+98
+],
+
+borderColor:"lime",
+
+backgroundColor:"cyan",
+
+fill:false,
+
+tension:0.4
+}]
+}
+});
+
+</script>
+
+</body>
+</html>
